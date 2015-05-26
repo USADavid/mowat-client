@@ -2,7 +2,7 @@ var MoWAT = (function () {
 	
 	var MoWATServerIP = "192.168.";
 	
-	var analyticsData = "{", moduleData = {}, debug = true;
+	var analyticsData = {}, moduleData = {}, debug = true;
 	
 	return {
 		debug : function (on) {
@@ -72,19 +72,22 @@ var MoWAT = (function () {
 			}
 		},
 	
-		sendToServer : function(json) {
-			analyticsData += "," + json;
+		sendToServer : function(module, time, content) {
+			if (typeof analyticsData[module] === "undefined") {
+				analyticsData[module] = {};
+			}
+			analyticsData[module][time] = {};
+			analyticsData[module][time] = content;
 		},
 		
 		send : function() {
-			analyticsData += "}";
+			console.log(JSON.stringify(analyticsData));
 			if(Modernizr.beacon) {
 				//navigator.sendBeacon(MoWATServerIP, analyticsData);
 			} else {
 				// Ajax
 			}
-			console.log(analyticsData);
-			analyticsData = "{";
+			analyticsData = {};
 		}
 	};
 	
