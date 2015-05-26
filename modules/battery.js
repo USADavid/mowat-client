@@ -7,17 +7,15 @@ MoWAT.createModule("battery", function(sandbox) {
 	}
 	
 	function batteryFunction(battery) {
-		// Update the battery status initially when the promise resolves ...
-        logBattery(battery);
+		logBattery(battery);
 
-        // .. and for any subsequent updates.
-        battery.onchargingchange = function () {
-          logBattery(battery);
-        };
+		battery.onchargingchange = function () {
+			logBattery(battery);
+		};
 
-        battery.onlevelchange = function () {
-          logBattery(battery);
-        };
+		battery.onlevelchange = function () {
+			logBattery(battery);
+		};
 
         battery.ondischargingtimechange = function () {
           logBattery(battery);

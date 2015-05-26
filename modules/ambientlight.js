@@ -1,7 +1,7 @@
 MoWAT.createModule("ambientlight", function(sandbox) {
 	
 	function listener(event) {
-		sandbox.log(event.value)
+		sandbox.log(event.value);
 	}
 	
 	return {

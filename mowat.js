@@ -1,6 +1,8 @@
 var MoWAT = (function () {
 	
-	var moduleData = {}, debug = true;
+	var MoWATServerIP = "192.168.";
+	
+	var analyticsData = "{", moduleData = {}, debug = true;
 	
 	return {
 		debug : function (on) {
@@ -40,6 +42,7 @@ var MoWAT = (function () {
 					this.start(moduleID);
 				}
 			}
+			window.setInterval(this.send, 20000); // Send every 20 sec
 		},
 		
 		stop : function (moduleID) {
@@ -68,9 +71,23 @@ var MoWAT = (function () {
 				// do nothing or send to server
 			}
 		},
+	
+		sendToServer : function(json) {
+			analyticsData += "," + json;
+		},
+		
+		send : function() {
+			analyticsData += "}";
+			if(Modernizr.beacon) {
+				//navigator.sendBeacon(MoWATServerIP, analyticsData);
+			} else {
+				// Ajax
+			}
+			console.log(analyticsData);
+			analyticsData = "{";
+		}
 	};
 	
 	
 }());
 
-MoWAT.startAll();
