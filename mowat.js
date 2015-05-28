@@ -1,6 +1,6 @@
 var MoWAT = (function () {
 	
-	var MoWATServerIP = "192.168.";
+	var MoWATServerIP = "http://192.168.1.26:3000";
 	
 	var analyticsData = {}, moduleData = {}, debug = true;
 	
@@ -81,13 +81,23 @@ var MoWAT = (function () {
 		},
 		
 		send : function() {
-			console.log(JSON.stringify(analyticsData));
-			if(Modernizr.beacon) {
-				//navigator.sendBeacon(MoWATServerIP, analyticsData);
-			} else {
-				// Ajax
+			//console.log(JSON.stringify(analyticsData));
+			var json = JSON.stringify(analyticsData);
+			if(json !== '{}') {
+				if(Modernizr.beacon) {
+					if(!navigator.sendBeacon(MoWATServerIP, json)) {
+						console.error("sendBeacon returned false");
+					}
+				} else {
+					console.warning("sendBeacon is not supported, using ajax");
+					var req = new XMLHttpRequest();
+					req.open('POST', MoWATServerIP);
+					req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+					req.send(json);
+				}
 			}
 			analyticsData = {};
+
 		}
 	};
 	
