@@ -4,6 +4,9 @@ var MoWAT = (function () {
 	
 	var analyticsData = {}, moduleData = {}, debug = true;
 	
+	window.setInterval(this.send, 1000); // Send every sec
+	window.addEventListener('unload', this.sendBeacon, false);
+	
 	return {
 		debug : function (on) {
 			debug = on ? true : false;	
@@ -84,20 +87,25 @@ var MoWAT = (function () {
 			//console.log(JSON.stringify(analyticsData));
 			var json = JSON.stringify(analyticsData);
 			if(json !== '{}') {
+				var req = new XMLHttpRequest();
+				req.open('POST', MoWATServerIP);
+				req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+				req.send(json);
+			}
+			analyticsData = {};
+		},
+		
+		sendBeacon : function() {
+			var json = JSON.stringify(analyticsData);
+			if(json !== '{}') {
 				if(Modernizr.beacon) {
 					if(!navigator.sendBeacon(MoWATServerIP, json)) {
 						console.error("sendBeacon returned false");
 					}
 				} else {
-					console.warning("sendBeacon is not supported, using ajax");
-					var req = new XMLHttpRequest();
-					req.open('POST', MoWATServerIP);
-					req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-					req.send(json);
+					console.warning("sendBeacon is not supported");
 				}
 			}
-			analyticsData = {};
-
 		}
 	};
 	
