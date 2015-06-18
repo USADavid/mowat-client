@@ -35,7 +35,7 @@ MoWAT.createModule("audiovideo", function(sandbox) {
 	return {
 		init: function () {
 			sandbox.log("Creating WebRtcPeer and generating local sdp offer ...");
-			ws = new WebSocket('ws://' + server + '/magicmirror');
+			ws = new WebSocket('ws://' + server);
 			ws.onmessage = function(message) {
 				var parsedMessage = JSON.parse(message.data);
 				sandbox.log('Received message: ' + message.data);
