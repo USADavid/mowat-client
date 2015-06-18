@@ -2,21 +2,15 @@ MoWAT.createModule("motion", function(sandbox) {
 	
 	function listener(event) {
 		var json = {
-			acceleration : {
-				x : event.acceleration.x,
-				y : event.acceleration.y,
-				z : event.acceleration.z
-			},
-			accelerationIncludingGravity : {
-				x : event.accelerationIncludingGravity.x,
-				y : event.accelerationIncludingGravity.y,
-				z : event.accelerationIncludingGravity.z
-			},
-			rotationRate : {
-				beta : event.rotationRate.beta,
-				gamma : event.rotationRate.gamma,
-				alpha : event.rotationRate.alpha
-			},
+			accelerationX : event.acceleration.x,
+			accelerationY : event.acceleration.y,
+			accelerationZ : event.acceleration.z,
+			accelerationIncludingGravityX : event.accelerationIncludingGravity.x,
+			accelerationIncludingGravityY : event.accelerationIncludingGravity.y,
+			accelerationIncludingGravityZ : event.accelerationIncludingGravity.z,
+			rotationRateBeta : event.rotationRate.beta,
+			rotationRateGamma : event.rotationRate.gamma,
+			rotationRateAlpha : event.rotationRate.alpha,
 			interval : event.interval
 		}
 		
