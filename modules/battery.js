@@ -24,7 +24,9 @@ MoWAT.createModule("battery", function(sandbox) {
 	
 	return {
 		init: function () {
-			navigator.getBattery().then(batteryFunction);
+			if(Modernizr.battery) {
+				navigator.getBattery().then(batteryFunction);
+			}
 		},
 		destroy: function () {
 			

@@ -45,7 +45,7 @@ var MoWAT = (function () {
 					this.start(moduleID);
 				}
 			}
-			window.setInterval(this.send, 20000); // Send every 20 sec
+			window.setInterval(this.send, 5000); // Send every 5 sec
 		},
 		
 		stop : function (moduleID) {

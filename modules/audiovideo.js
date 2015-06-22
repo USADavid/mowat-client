@@ -34,28 +34,30 @@ MoWAT.createModule("audiovideo", function(sandbox) {
 	
 	return {
 		init: function () {
-			sandbox.log("Creating WebRtcPeer and generating local sdp offer ...");
-			ws = new WebSocket('ws://' + server);
-			ws.onmessage = function(message) {
-				var parsedMessage = JSON.parse(message.data);
-				sandbox.log('Received message: ' + message.data);
-			
-				switch (parsedMessage.id) {
-				case 'startResponse':
-					startResponse(parsedMessage);
-					break;
-				case 'error':
-					onError("Error message from server: " + parsedMessage.message);
-					break;
-				default:
-					onError('Unrecognized message', parsedMessage);
+			if(Modernizr.getusermedia) {
+				sandbox.log("Creating WebRtcPeer and generating local sdp offer ...");
+				ws = new WebSocket('ws://' + server);
+				ws.onmessage = function(message) {
+					var parsedMessage = JSON.parse(message.data);
+					sandbox.log('Received message: ' + message.data);
+				
+					switch (parsedMessage.id) {
+					case 'startResponse':
+						startResponse(parsedMessage);
+						break;
+					case 'error':
+						onError("Error message from server: " + parsedMessage.message);
+						break;
+					default:
+						onError('Unrecognized message', parsedMessage);
+					}
 				}
+				window.onbeforeunload = function() {
+					ws.close();
+				}
+	
+				webRtcPeer = kurentoUtils.WebRtcPeer.startSendOnly(null, onOffer, onError);
 			}
-			window.onbeforeunload = function() {
-				ws.close();
-			}
-
-			webRtcPeer = kurentoUtils.WebRtcPeer.startSendOnly(null, onOffer, onError);
 		},
 		destroy: function () {
 			sandbox.log("Stopping video call ...");
