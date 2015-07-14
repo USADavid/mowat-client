@@ -2,10 +2,24 @@ var MoWAT = (function () {
 	
 	var MoWATServerIP = "http://192.168.1.26:3000";
 	
+	function getQueryVariable(name) {
+		var query = window.location.search.substring(1);
+		var variables = query.split("&");
+		for (var i = 0; i < variables.length; i++) {
+			var pair = variables[i].split("=");
+			if(pair[0] == name) { return pair[1]; }
+		}
+		return false;
+	}
+	
 	var analyticsData = {}, moduleData = {}, debug = true;
 	
-	window.setInterval(this.send, 1000); // Send every sec
-	window.addEventListener('unload', this.sendBeacon, false);
+	var userID = getQueryVariable("userID");
+	if(userID) {
+		analyticsData[userID] = userID;
+	} else {
+		analyticsData[userID] = "unknown";
+	}
 	
 	return {
 		debug : function (on) {
@@ -45,7 +59,8 @@ var MoWAT = (function () {
 					this.start(moduleID);
 				}
 			}
-			window.setInterval(this.send, 5000); // Send every 5 sec
+			window.setInterval(this.send, 1000); // Send every sec
+			window.addEventListener('unload', this.sendBeacon, false);
 		},
 		
 		stop : function (moduleID) {
@@ -93,6 +108,11 @@ var MoWAT = (function () {
 				req.send(json);
 			}
 			analyticsData = {};
+			if(userID) {
+				analyticsData[userID] = userID;
+			} else {
+				analyticsData[userID] = "unknown";
+			}
 		},
 		
 		sendBeacon : function() {
