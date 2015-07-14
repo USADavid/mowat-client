@@ -1,6 +1,6 @@
 var MoWAT = (function () {
 	
-	var MoWATServerIP = "http://192.168.1.26:3000";
+	var MoWATServerIP = "http://192.168.59.103:3000";
 	
 	function getQueryVariable(name) {
 		var query = window.location.search.substring(1);
@@ -16,9 +16,9 @@ var MoWAT = (function () {
 	
 	var userID = getQueryVariable("userID");
 	if(userID) {
-		analyticsData[userID] = userID;
+		analyticsData["userID"] = userID;
 	} else {
-		analyticsData[userID] = "unknown";
+		analyticsData["userID"] = "unknown";
 	}
 	
 	return {
@@ -109,9 +109,9 @@ var MoWAT = (function () {
 			}
 			analyticsData = {};
 			if(userID) {
-				analyticsData[userID] = userID;
+				analyticsData["userID"] = userID;
 			} else {
-				analyticsData[userID] = "unknown";
+				analyticsData["userID"] = "unknown";
 			}
 		},
 		
