@@ -15,11 +15,6 @@ var MoWAT = (function () {
 	var analyticsData = {}, moduleData = {}, debug = true;
 	
 	var userID = getQueryVariable("userID");
-	if(userID) {
-		analyticsData["userID"] = userID;
-	} else {
-		analyticsData["userID"] = "unknown";
-	}
 	
 	return {
 		debug : function (on) {
@@ -102,23 +97,30 @@ var MoWAT = (function () {
 			//console.log(JSON.stringify(analyticsData));
 			var json = JSON.stringify(analyticsData);
 			if(json !== '{}') {
+				if(userID) {
+					analyticsData["userID"] = userID;
+				} else {
+					analyticsData["userID"] = "unknown";
+				}
+				json = JSON.stringify(analyticsData);
 				var req = new XMLHttpRequest();
 				req.open('POST', MoWATServerIP);
 				req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
 				req.send(json);
 			}
 			analyticsData = {};
-			if(userID) {
-				analyticsData["userID"] = userID;
-			} else {
-				analyticsData["userID"] = "unknown";
-			}
 		},
 		
 		sendBeacon : function() {
 			var json = JSON.stringify(analyticsData);
 			if(json !== '{}') {
 				if(Modernizr.beacon) {
+					if(userID) {
+						analyticsData["userID"] = userID;
+					} else {
+						analyticsData["userID"] = "unknown";
+					}
+					json = JSON.stringify(analyticsData);
 					if(!navigator.sendBeacon(MoWATServerIP, json)) {
 						console.error("sendBeacon returned false");
 					}
